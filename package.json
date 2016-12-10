@@ -1,0 +1,14 @@
+{
+  "name": "test_front_end",
+  "version": "1.0.0",
+  "description": "A server for font-end testing",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "testing"
+  ],
+  "author": "heli",
+  "license": "ISC"
+}
