@@ -1,0 +1,50 @@
+<template>
+    <div id="app">
+        <div id="nav">
+            <navComp></navComp>
+        </div>
+        <div id="content">
+            <contentComp></contentComp>
+        </div>
+    </div>
+</template>
+
+<script>
+import navComp from './components/nav.vue'
+import contentComp from './components/content.vue'
+export default {
+  name: 'nav',
+  data () {
+    return {
+
+    }
+  },
+  components:{
+     navComp,
+     contentComp
+  }
+}
+</script>
+
+<style type="text/css">
+html,body{
+    height: 100%;
+}
+#app{
+    height: 100%;
+}
+#nav {
+  font-family: '微软雅黑', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  height: 40px;
+  background: #eeeeee;
+  margin-top: 0px;
+}
+#content{
+  font-family: '微软雅黑', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+</style>
