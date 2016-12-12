@@ -10,8 +10,8 @@
     export default{
         data(){
             return{
-                setting_R: '#',
-                list_R: '#'
+                setting_R: '/',
+                list_R: '/list'
             }
         },
         components:{

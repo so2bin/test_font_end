@@ -6,7 +6,11 @@ const mondb   = require('../db/mongo');
 const router = module.exports = express.Router();
 
 router.get('/', function (req, res, next) {
-  res.sendFile(path.join(__dirname, '../public/index.html'));
+  res.sendFile(path.join(__dirname, '../public/html/index.html'));
+});
+
+router.get('/list',function (req, res, next) {
+  res.sendFile(path.join(__dirname, '../public/html/list.html'));
 });
 
 router.get('/data', function (req, res, next) {
@@ -25,7 +29,7 @@ router.get('/data', function (req, res, next) {
       });
     });
     return res.end(JSON.stringify(result));
-  })
+  });
 });
 
 router.post('/data', function (req, res, next) {
@@ -48,7 +52,7 @@ router.post('/data', function (req, res, next) {
       });
     }
     return res.end(JSON.stringify({code: 0, msg: 'success'}));
-  })
+  });
 });
 
 /**
@@ -70,6 +74,30 @@ router.get('/test',function (req,res,next) {
     result.msg.push({
       url: data.url,
       res: JSON.parse(reStr)
+    });
+    res.writeHead(200, {"Content-Type": "application/json"});
+    return res.end(JSON.stringify(result));
+  });
+});
+
+/**
+ * list all the data in db
+ */
+router.get('/list',function (req, res, next) {
+  let result = {
+    code: 0,
+    msg : []
+  };
+  mondb.dataModel.find(function (err, data) {
+    if (err) {
+      res.end(JSON.stringify({code: 100, msg: err}));
+    }
+    data.forEach(function (itm) {
+      let reStr = JSON.parse(itm.res);
+      result.msg.push({
+        url: itm.url,
+        res: JSON.parse(reStr)
+      });
     });
     res.writeHead(200, {"Content-Type": "application/json"});
     return res.end(JSON.stringify(result));

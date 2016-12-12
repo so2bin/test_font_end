@@ -29,14 +29,6 @@
         computed: {
 
         },
-        watch:{
-            url: function(newV, oldV){
-
-            },
-            resData: function(newV, oldV){
-
-            }
-        },
         methods:{
             onSet: function(e){
                 var that = this;
