@@ -12,7 +12,7 @@ const routes = require('./routes');
 const app = express();
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, 'public/html'));
 app.set('view engine', 'ejs');
 app.set('port', process.env.PORT || 8080);
 
@@ -45,7 +45,7 @@ app.use(function (req, res, next) {
 if (app.get('env') === 'development') {
   app.use(function (err, req, res, next) {
     res.status(err.status || 500);
-    res.sendFile(path.join(__dirname,'public/html/error.html'));
+    res.render('error',{msg: err});
   });
 }
 
@@ -53,7 +53,7 @@ if (app.get('env') === 'development') {
 // no stacktraces leaked to user
 app.use(function (err, req, res, next) {
   res.status(err.status || 500);
-  res.sendFile(path.join(__dirname,'public/html/error.html'));
+  res.render('error',{msg: err});
 });
 
 
