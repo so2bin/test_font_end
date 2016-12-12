@@ -7,5 +7,12 @@ module.exports = {
   },
   server:{
     post: 8080
+  },
+  mon_data:{
+    host: 'localhost',
+    port: 27017,
+    dbName: 'front_test',
+    user: 'hbb',
+    pwd: '123'
   }
 };
