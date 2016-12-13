@@ -16443,7 +16443,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   }
 })()}
 },{"jquery":1,"vue":3,"vue-hot-reload-api":2,"vueify/lib/insert-css":4}],7:[function(require,module,exports){
-var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert(".nav-ul{\n    list-style: none;\n}\n.nav-ul li{\n    display: inline-block;\n    width: 100px;\n}\n.nav-ul a{\n    text-decoration:none;\n    font-weight: 800;\n    line-height: 40px;\n    font-size: 18px;\n    color: #1384d8;\n}\n.nav-title{\n    text-align: center;\n}")
+var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert(".nav-ul{\n    list-style: none;\n    padding: 0;\n    margin: 0;\n}\n.nav-ul li{\n    display: inline-block;\n    width: 100px;\n}\n.nav-ul a{\n    text-decoration:none;\n    font-weight: 800;\n    line-height: 40px;\n    font-size: 18px;\n    color: #1384d8;\n}\n.nav-title{\n    text-align: center;\n}")
 ;(function(){
 'use strict';
 
