@@ -13,6 +13,19 @@
         <div id="res-tips">
             <div v-bind:style="{color: res_tips_color}">{{res_tips_text}}</div>
         </div>
+        <div id="help-tips">
+            <p class="h-t">配置注意事项:</p>
+            1. Setting页面刷新时会初始化一个模板,便于修改;
+            <br/>
+            2. 数据库里针对每个url保存一份数据,所以确保配置的url唯一;
+            <br/>
+            3. result data json必须时json格式, 否则无法正确解析;
+            <br/>
+            <br/>
+            <p class="h-t">前端测试接口:</p>
+            <span class="h-url">10.17.65.101:8080/test?url=XXX</span> <br/>其中XXX为查询的url值,返回的是url对应的js对象
+            <br/>
+        </div>
     </div>
 </template>
 <script>
@@ -145,5 +158,18 @@
 }
 .btn-set:active{
     box-shadow:0 0 10px #0cc;
+}
+#help-tips{
+    position:absolute;
+    top:200px;
+    right:50px;
+    width:360px;
+}
+.h-t{
+    font-weight:700;
+    font-size:16px;
+}
+.h-url{
+    color:red;
 }
 </style>

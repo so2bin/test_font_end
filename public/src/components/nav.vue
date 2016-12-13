@@ -24,7 +24,6 @@
 <style>
 .nav-ul{
     list-style: none;
-    padding: 0;
     margin: 0;
 }
 .nav-ul li{
