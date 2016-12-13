@@ -15,6 +15,7 @@ mongoose.connect(`mongodb://${mon_data.user}:${mon_data.pwd}@${mon_data.host}:${
 });
 
 const dataSchema = new mongoose.Schema({
+  gate: String,
   url: String,
   res: String
 });

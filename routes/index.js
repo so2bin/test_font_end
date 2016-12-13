@@ -25,7 +25,8 @@ router.get('/data', function (req, res, next) {
     data.forEach(function (itm) {
       result.msg.push({
         url: itm.url,
-        res: itm.res
+        res: JSON.parse(itm.res),
+        gate: itm.gate
       });
     });
     return res.end(JSON.stringify(result));
@@ -35,6 +36,7 @@ router.get('/data', function (req, res, next) {
 router.post('/data', function (req, res, next) {
   let url     = req.body.url;
   let resData = req.body.resData;
+  let gate = req.body.gate || '';
   if(!url || !resData){
     return res.end(JSON.stringify({code: 100, msg: 'empty url or json'}));
   }
@@ -43,7 +45,7 @@ router.post('/data', function (req, res, next) {
       return res.end(JSON.stringify({code: 100, msg: err}));
     }
     if (data.length == 0) {
-      mondb.dataModel.create({url, res: resData}, function (err) {
+      mondb.dataModel.create({url, res: resData, gate}, function (err) {
         if (err)
           return res.end(JSON.stringify({code: 100, msg: err}));
       });
@@ -63,9 +65,10 @@ router.post('/data', function (req, res, next) {
  */
 router.get('/test',function (req,res,next) {
   let url=req.query.url;
+  let gate = req.query.gate || '';
   if(!url)
     return res.end(JSON.stringify({code:1003, msg:'empty url'}));
-  mondb.dataModel.findOne({url: url}, function (err, data) {
+  mondb.dataModel.findOne({url, gate}, function (err, data) {
     if (err) {
       return res.end(JSON.stringify({code: 100, msg: err}));
     }
@@ -79,7 +82,8 @@ router.get('/test',function (req,res,next) {
     let reStr = JSON.parse(data.res);
     result.msg.push({
       url: data.url,
-      res: JSON.parse(reStr)
+      res: JSON.parse(reStr),
+      gate: data.gate
     });
     res.writeHead(200, {"Content-Type": "application/json"});
     return res.end(JSON.stringify(result));
@@ -102,7 +106,8 @@ router.get('/list',function (req, res, next) {
       let reStr = JSON.parse(itm.res);
       result.msg.push({
         url: itm.url,
-        res: JSON.parse(reStr)
+        res: JSON.parse(reStr),
+        gate: itm.gate
       });
     });
     res.writeHead(200, {"Content-Type": "application/json"});
@@ -112,11 +117,12 @@ router.get('/list',function (req, res, next) {
 
 router.delete('/list',function (req, res, next) {
   let url = req.body.url;
+  let gate = req.body.gate || "";
   let result = {
     code: 0,
     msg : []
   };
-  mondb.dataModel.remove({url:url},function (err, data) {
+  mondb.dataModel.remove({url:url,gate},function (err, data) {
     if (err) {
       res.code = 100;
       result.msg = err;
