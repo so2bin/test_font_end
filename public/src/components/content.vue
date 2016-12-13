@@ -17,6 +17,7 @@
 </template>
 <script>
     import $ from 'jquery'
+    // import _ from 'jquery-autocomplete-js'
     export default{
         data(){
             return{
@@ -77,6 +78,10 @@
                 that.url = data.url;
                 that.resData = data.data;
             });
+            // init  the url input the auto complete
+            // $('#url').autocomplete({
+            //     options:['One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve']
+            // })
         },
         components:{
 

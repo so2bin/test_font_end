@@ -82,7 +82,7 @@ router.get('/test',function (req,res,next) {
     let reStr = JSON.parse(data.res);
     result.msg.push({
       url: data.url,
-      res: JSON.parse(reStr),
+      res: reStr,
       gate: data.gate
     });
     res.writeHead(200, {"Content-Type": "application/json"});
