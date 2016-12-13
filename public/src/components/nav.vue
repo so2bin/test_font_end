@@ -4,6 +4,9 @@
             <li><a :href="setting_R">Setting</a></li>
             <li><a :href="list_R">List</a></li>
         </ul>
+        <div class="nav-title">
+            <h1>前端数据测试</h1>
+        </div>
     </div>
 </template>
 <script>
@@ -33,5 +36,7 @@
     font-size: 18px;
     color: #1384d8;
 }
-
+.nav-title{
+    text-align: center;
+}
 </style>

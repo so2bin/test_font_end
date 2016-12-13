@@ -35,6 +35,9 @@ router.get('/data', function (req, res, next) {
 router.post('/data', function (req, res, next) {
   let url     = req.body.url;
   let resData = req.body.resData;
+  if(!url || !resData){
+    return res.end(JSON.stringify({code: 100, msg: 'empty url or json'}));
+  }
   mondb.dataModel.find({url: url}, function (err, data) {
     if (err) {
       return res.end(JSON.stringify({code: 100, msg: err}));
@@ -70,6 +73,9 @@ router.get('/test',function (req,res,next) {
       code: 0,
       msg : []
     };
+    if(data==null){
+      return res.end(JSON.stringify(result));
+    }
     let reStr = JSON.parse(data.res);
     result.msg.push({
       url: data.url,
@@ -102,4 +108,21 @@ router.get('/list',function (req, res, next) {
     res.writeHead(200, {"Content-Type": "application/json"});
     return res.end(JSON.stringify(result));
   })
+});
+
+router.delete('/list',function (req, res, next) {
+  let url = req.body.url;
+  let result = {
+    code: 0,
+    msg : []
+  };
+  mondb.dataModel.remove({url:url},function (err, data) {
+    if (err) {
+      res.code = 100;
+      result.msg = err;
+      res.end(JSON.stringify(result));
+    }
+    res.msg = 'success';
+    return res.end(JSON.stringify(result));
+  });
 });

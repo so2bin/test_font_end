@@ -1,186 +1,4 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-// shim for using process in browser
-var process = module.exports = {};
-
-// cached from whatever global is present so that test runners that stub it
-// don't break things.  But we need to wrap it in a try catch in case it is
-// wrapped in strict mode code which doesn't define any globals.  It's inside a
-// function because try/catches deoptimize in certain engines.
-
-var cachedSetTimeout;
-var cachedClearTimeout;
-
-function defaultSetTimout() {
-    throw new Error('setTimeout has not been defined');
-}
-function defaultClearTimeout () {
-    throw new Error('clearTimeout has not been defined');
-}
-(function () {
-    try {
-        if (typeof setTimeout === 'function') {
-            cachedSetTimeout = setTimeout;
-        } else {
-            cachedSetTimeout = defaultSetTimout;
-        }
-    } catch (e) {
-        cachedSetTimeout = defaultSetTimout;
-    }
-    try {
-        if (typeof clearTimeout === 'function') {
-            cachedClearTimeout = clearTimeout;
-        } else {
-            cachedClearTimeout = defaultClearTimeout;
-        }
-    } catch (e) {
-        cachedClearTimeout = defaultClearTimeout;
-    }
-} ())
-function runTimeout(fun) {
-    if (cachedSetTimeout === setTimeout) {
-        //normal enviroments in sane situations
-        return setTimeout(fun, 0);
-    }
-    // if setTimeout wasn't available but was latter defined
-    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
-        cachedSetTimeout = setTimeout;
-        return setTimeout(fun, 0);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedSetTimeout(fun, 0);
-    } catch(e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
-            return cachedSetTimeout.call(null, fun, 0);
-        } catch(e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
-            return cachedSetTimeout.call(this, fun, 0);
-        }
-    }
-
-
-}
-function runClearTimeout(marker) {
-    if (cachedClearTimeout === clearTimeout) {
-        //normal enviroments in sane situations
-        return clearTimeout(marker);
-    }
-    // if clearTimeout wasn't available but was latter defined
-    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
-        cachedClearTimeout = clearTimeout;
-        return clearTimeout(marker);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedClearTimeout(marker);
-    } catch (e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
-            return cachedClearTimeout.call(null, marker);
-        } catch (e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
-            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
-            return cachedClearTimeout.call(this, marker);
-        }
-    }
-
-
-
-}
-var queue = [];
-var draining = false;
-var currentQueue;
-var queueIndex = -1;
-
-function cleanUpNextTick() {
-    if (!draining || !currentQueue) {
-        return;
-    }
-    draining = false;
-    if (currentQueue.length) {
-        queue = currentQueue.concat(queue);
-    } else {
-        queueIndex = -1;
-    }
-    if (queue.length) {
-        drainQueue();
-    }
-}
-
-function drainQueue() {
-    if (draining) {
-        return;
-    }
-    var timeout = runTimeout(cleanUpNextTick);
-    draining = true;
-
-    var len = queue.length;
-    while(len) {
-        currentQueue = queue;
-        queue = [];
-        while (++queueIndex < len) {
-            if (currentQueue) {
-                currentQueue[queueIndex].run();
-            }
-        }
-        queueIndex = -1;
-        len = queue.length;
-    }
-    currentQueue = null;
-    draining = false;
-    runClearTimeout(timeout);
-}
-
-process.nextTick = function (fun) {
-    var args = new Array(arguments.length - 1);
-    if (arguments.length > 1) {
-        for (var i = 1; i < arguments.length; i++) {
-            args[i - 1] = arguments[i];
-        }
-    }
-    queue.push(new Item(fun, args));
-    if (queue.length === 1 && !draining) {
-        runTimeout(drainQueue);
-    }
-};
-
-// v8 likes predictible objects
-function Item(fun, array) {
-    this.fun = fun;
-    this.array = array;
-}
-Item.prototype.run = function () {
-    this.fun.apply(null, this.array);
-};
-process.title = 'browser';
-process.browser = true;
-process.env = {};
-process.argv = [];
-process.version = ''; // empty string to avoid regexp issues
-process.versions = {};
-
-function noop() {}
-
-process.on = noop;
-process.addListener = noop;
-process.once = noop;
-process.off = noop;
-process.removeListener = noop;
-process.removeAllListeners = noop;
-process.emit = noop;
-
-process.binding = function (name) {
-    throw new Error('process.binding is not supported');
-};
-
-process.cwd = function () { return '/' };
-process.chdir = function (dir) {
-    throw new Error('process.chdir is not supported');
-};
-process.umask = function() { return 0; };
-
-},{}],2:[function(require,module,exports){
 /*!
  * jQuery JavaScript Library v3.1.1
  * https://jquery.com/
@@ -10402,7 +10220,7 @@ if ( !noGlobal ) {
 return jQuery;
 } );
 
-},{}],3:[function(require,module,exports){
+},{}],2:[function(require,module,exports){
 var Vue // late bind
 var map = window.__VUE_HOT_MAP__ = Object.create(null)
 var installed = false
@@ -10528,7 +10346,7 @@ exports.reload = tryWrap(function (id, options) {
   })
 })
 
-},{}],4:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 (function (process,global){
 /*!
  * Vue.js v2.1.4
@@ -16469,7 +16287,7 @@ setTimeout(function () {
 module.exports = Vue$2;
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":1}],5:[function(require,module,exports){
+},{"_process":9}],4:[function(require,module,exports){
 var inserted = exports.cache = {}
 
 function noop () {}
@@ -16494,8 +16312,8 @@ exports.insert = function (css) {
   }
 }
 
-},{}],6:[function(require,module,exports){
-var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert("html,body{\r\n    height: 100%;\r\n}\r\n#app{\r\n    height: 100%;\r\n}\r\n#nav {\r\n  font-family: '微软雅黑', sans-serif;\r\n  -webkit-font-smoothing: antialiased;\r\n  -moz-osx-font-smoothing: grayscale;\r\n  height: 40px;\r\n  background: #eeeeee;\r\n  margin-top: 0px;\r\n}\r\n#content{\r\n  font-family: '微软雅黑', sans-serif;\r\n  -webkit-font-smoothing: antialiased;\r\n  -moz-osx-font-smoothing: grayscale;\r\n}")
+},{}],5:[function(require,module,exports){
+var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert("html,body{\n    height: 100%;\n}\n#app{\n    height: 100%;\n}\n#nav {\n  font-family: '微软雅黑', sans-serif;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  height: 40px;\n  background: #eeeeee;\n  margin-top: 0px;\n}\n#content{\n  font-family: '微软雅黑', sans-serif;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n  margin-top: 80px;\n}")
 ;(function(){
 'use strict';
 
@@ -16536,13 +16354,13 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   module.hot.accept()
   module.hot.dispose(__vueify_style_dispose__)
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-d5ca77ba", __vue__options__)
+    hotAPI.createRecord("data-v-22825183", __vue__options__)
   } else {
-    hotAPI.reload("data-v-d5ca77ba", __vue__options__)
+    hotAPI.reload("data-v-22825183", __vue__options__)
   }
 })()}
-},{"./components/dataList.vue":7,"./components/nav.vue":8,"vue":4,"vue-hot-reload-api":3,"vueify/lib/insert-css":5}],7:[function(require,module,exports){
-var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert("#wrapper{\r\n    margin-left:10px;\r\n    position: relative;\r\n}\r\n\r\n.tbl{\r\n    border-spacing: 0;\r\n    width: 100%;\r\n    border: solid #ccc 1px;\r\n    border-radius: 6px;\r\n    box-shadow: 0 1px 1px #ccc;\r\n}\r\n.tbl tr{\r\n    height: 30px;\r\n    overflow-y: hidden;\r\n}\r\n.tbl tr:hover {  \r\n    background: #fbf8e9;  \r\n    -o-transition: all 0.1s ease-in-out;  \r\n    -webkit-transition: all 0.1s ease-in-out;  \r\n    -moz-transition: all 0.1s ease-in-out;  \r\n    -ms-transition: all 0.1s ease-in-out;  \r\n    transition: all 0.1s ease-in-out;  \r\n}\r\n.tbl td, .tbl th {  \r\n    border-left: 1px solid #ccc;  \r\n    border-top: 1px solid #ccc;  \r\n    padding: 10px;  \r\n    text-align: left;  \r\n}\r\n.tbl td:first-child, .tbl th:first-child {  \r\nborder-left: none;  \r\n}  \r\n  \r\n.tbl th:first-child {  \r\n-moz-border-radius: 6px 0 0 0;  \r\n-webkit-border-radius: 6px 0 0 0;  \r\nborder-radius: 6px 0 0 0;  \r\n}")
+},{"./components/dataList.vue":6,"./components/nav.vue":7,"vue":3,"vue-hot-reload-api":2,"vueify/lib/insert-css":4}],6:[function(require,module,exports){
+var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert("#wrapper{\n    margin-left:10px;\n    position: relative;\n}\n#res-tips{\n    position: absolute;\n    top:100px;\n    left: 50%;\n    font-size: 18px;\n    font-weight: 800;\n    width: 160px;\n    height: 70px;\n    line-height: 70px;\n    background: #efe4b4;\n    text-align: center;\n    border-radius: 6px;\n}\n.tbl{\n    margin-top: 50px;\n    border-spacing: 0;\n    width: 100%;\n    border: solid #ccc 1px;\n    border-radius: 6px;\n    box-shadow: 0 1px 1px #ccc;\n}\n.tbl tr{\n    height: 30px;\n    overflow-y: hidden;\n}\n.tbl tr:hover {  \n    background: #fbf8e9;  \n    -o-transition: all 0.1s ease-in-out;  \n    -webkit-transition: all 0.1s ease-in-out;  \n    -moz-transition: all 0.1s ease-in-out;  \n    -ms-transition: all 0.1s ease-in-out;  \n    transition: all 0.1s ease-in-out;  \n}\n.tbl td, .tbl th {  \n    border-left: 1px solid #ccc;  \n    border-top: 1px solid #ccc;  \n    padding: 10px;  \n    text-align: left;  \n}\n.tbl th{\n    text-align: center;\n}\n.tbl td:first-child, .tbl th:first-child {  \n    border-left: none;  \n}  \n.tbl th:first-child {  \n    -moz-border-radius: 6px 0 0 0;  \n    -webkit-border-radius: 6px 0 0 0;  \n    border-radius: 6px 0 0 0;  \n}\n.oper{\n    display: inline-block;\n    width: 100px;\n    height: 40px;\n    line-height: 40px;\n    background:#5bb4e4;\n    border-radius: 6px;\n    text-align: center;\n    color: #fff;\n}\n.oper:active{\n    background:#0993de;\n    box-shadow: 0 0 10px #0cc;\n}")
 ;(function(){
 'use strict';
 
@@ -16559,12 +16377,43 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = {
     data: function data() {
         return {
-            res_tips_color: '#eee',
+            res_tips_color: 'red',
             res_tips_text: "",
-            resArr: []
+            resArr: [],
+            show_tips: false
         };
     },
 
+    methods: {
+        onDelRow: function onDelRow(e) {
+            var that = this;
+            var row = (0, _jquery2.default)(e.target).parents('tr');
+            var url = row.find('td').get(0).innerText;
+            _jquery2.default.ajax({
+                url: '/list',
+                type: 'delete',
+                data: { url: url }
+            }).then(function (res) {
+                res = JSON.parse(res);
+                if (res.code == 0) {
+                    row.remove();
+                    that.res_tips_text = '删除成功';
+                    that.res_tips_color = 'green';
+                    that.show_tips = true;
+                    setTimeout(function () {
+                        that.show_tips = false;
+                    }, 600);
+                } else {
+                    that.res_tips_text = '删除失败';
+                    that.res_tips_color = 'red';
+                    that.show_tips = true;
+                    setTimeout(function () {
+                        that.show_tips = false;
+                    }, 600);
+                }
+            });
+        }
+    },
     created: function created() {
         var that = this;
         _jquery2.default.ajax({
@@ -16580,7 +16429,7 @@ exports.default = {
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;return _h('div',{attrs:{"id":"wrapper"}},[_h('div',{staticClass:"tbl-wraper"},[_h('table',{staticClass:"tbl"},[_vm._m(0)," ",_vm._l((_vm.resArr),function(d){return _h('tr',[_h('td',[_vm._s(d.url)])," ",_h('td',[_vm._s(d.res)])," ",_h('td',["oper"])])})])])," ",_h('div',{attrs:{"id":"res-tips"}},[_h('div',{style:({color: _vm.res_tips_color})},[_vm._s(_vm.res_tips_text)])])])}
+__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;return _h('div',{attrs:{"id":"wrapper"}},[_h('div',{staticClass:"tbl-wraper"},[_h('table',{staticClass:"tbl"},[_vm._m(0)," ",_vm._l((_vm.resArr),function(d){return _h('tr',[_h('td',[_vm._s(d.url)])," ",_h('td',[_vm._s(d.res)])," ",_h('td',{staticStyle:{"text-align":"center"}},[_h('div',{staticClass:"oper"},[_h('div',{on:{"click":_vm.onDelRow}},["删除"])])])])})])])," ",_h('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.show_tips),expression:"show_tips"}],attrs:{"id":"res-tips"}},[_h('div',{style:({color: _vm.res_tips_color})},[_vm._s(_vm.res_tips_text)])])])}
 __vue__options__.staticRenderFns = [function render () {var _vm=this;var _h=_vm.$createElement;return _h('thead',[_h('tr',[_h('th',{attrs:{"width":"20%"}},["url"])," ",_h('th',{attrs:{"width":"60%"}},["json"])," ",_h('th',{attrs:{"width":"20%"}},["操作"])])])}]
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -16588,13 +16437,13 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   module.hot.accept()
   module.hot.dispose(__vueify_style_dispose__)
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-3b8ac599", __vue__options__)
+    hotAPI.createRecord("data-v-5422a78c", __vue__options__)
   } else {
-    hotAPI.reload("data-v-3b8ac599", __vue__options__)
+    hotAPI.reload("data-v-5422a78c", __vue__options__)
   }
 })()}
-},{"jquery":2,"vue":4,"vue-hot-reload-api":3,"vueify/lib/insert-css":5}],8:[function(require,module,exports){
-var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert(".nav-ul{\r\n    list-style: none;\r\n}\r\n.nav-ul li{\r\n    display: inline-block;\r\n    width: 100px;\r\n}\r\n.nav-ul a{\r\n    text-decoration:none;\r\n    font-weight: 800;\r\n    line-height: 40px;\r\n    font-size: 18px;\r\n    color: #1384d8;\r\n}")
+},{"jquery":1,"vue":3,"vue-hot-reload-api":2,"vueify/lib/insert-css":4}],7:[function(require,module,exports){
+var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert(".nav-ul{\n    list-style: none;\n}\n.nav-ul li{\n    display: inline-block;\n    width: 100px;\n}\n.nav-ul a{\n    text-decoration:none;\n    font-weight: 800;\n    line-height: 40px;\n    font-size: 18px;\n    color: #1384d8;\n}\n.nav-title{\n    text-align: center;\n}")
 ;(function(){
 'use strict';
 
@@ -16615,20 +16464,20 @@ exports.default = {
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;return _h('div',{staticClass:"nav-top"},[_h('ul',{staticClass:"nav-ul"},[_h('li',[_h('a',{attrs:{"href":_vm.setting_R}},["Setting"])])," ",_h('li',[_h('a',{attrs:{"href":_vm.list_R}},["List"])])])])}
-__vue__options__.staticRenderFns = []
+__vue__options__.render = function render () {var _vm=this;var _h=_vm.$createElement;return _h('div',{staticClass:"nav-top"},[_h('ul',{staticClass:"nav-ul"},[_h('li',[_h('a',{attrs:{"href":_vm.setting_R}},["Setting"])])," ",_h('li',[_h('a',{attrs:{"href":_vm.list_R}},["List"])])])," ",_vm._m(0)])}
+__vue__options__.staticRenderFns = [function render () {var _vm=this;var _h=_vm.$createElement;return _h('div',{staticClass:"nav-title"},[_h('h1',["前端数据测试"])])}]
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   module.hot.accept()
   module.hot.dispose(__vueify_style_dispose__)
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-7b1a1f02", __vue__options__)
+    hotAPI.createRecord("data-v-3d63912f", __vue__options__)
   } else {
-    hotAPI.reload("data-v-7b1a1f02", __vue__options__)
+    hotAPI.reload("data-v-3d63912f", __vue__options__)
   }
 })()}
-},{"vue":4,"vue-hot-reload-api":3,"vueify/lib/insert-css":5}],9:[function(require,module,exports){
+},{"vue":3,"vue-hot-reload-api":2,"vueify/lib/insert-css":4}],8:[function(require,module,exports){
 'use strict';
 
 var _vue = require('vue');
@@ -16651,4 +16500,186 @@ new _vue2.default({
   }
 });
 
-},{"./List.vue":6,"vue":4}]},{},[9]);
+},{"./List.vue":5,"vue":3}],9:[function(require,module,exports){
+// shim for using process in browser
+var process = module.exports = {};
+
+// cached from whatever global is present so that test runners that stub it
+// don't break things.  But we need to wrap it in a try catch in case it is
+// wrapped in strict mode code which doesn't define any globals.  It's inside a
+// function because try/catches deoptimize in certain engines.
+
+var cachedSetTimeout;
+var cachedClearTimeout;
+
+function defaultSetTimout() {
+    throw new Error('setTimeout has not been defined');
+}
+function defaultClearTimeout () {
+    throw new Error('clearTimeout has not been defined');
+}
+(function () {
+    try {
+        if (typeof setTimeout === 'function') {
+            cachedSetTimeout = setTimeout;
+        } else {
+            cachedSetTimeout = defaultSetTimout;
+        }
+    } catch (e) {
+        cachedSetTimeout = defaultSetTimout;
+    }
+    try {
+        if (typeof clearTimeout === 'function') {
+            cachedClearTimeout = clearTimeout;
+        } else {
+            cachedClearTimeout = defaultClearTimeout;
+        }
+    } catch (e) {
+        cachedClearTimeout = defaultClearTimeout;
+    }
+} ())
+function runTimeout(fun) {
+    if (cachedSetTimeout === setTimeout) {
+        //normal enviroments in sane situations
+        return setTimeout(fun, 0);
+    }
+    // if setTimeout wasn't available but was latter defined
+    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
+        cachedSetTimeout = setTimeout;
+        return setTimeout(fun, 0);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedSetTimeout(fun, 0);
+    } catch(e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
+            return cachedSetTimeout.call(null, fun, 0);
+        } catch(e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
+            return cachedSetTimeout.call(this, fun, 0);
+        }
+    }
+
+
+}
+function runClearTimeout(marker) {
+    if (cachedClearTimeout === clearTimeout) {
+        //normal enviroments in sane situations
+        return clearTimeout(marker);
+    }
+    // if clearTimeout wasn't available but was latter defined
+    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
+        cachedClearTimeout = clearTimeout;
+        return clearTimeout(marker);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedClearTimeout(marker);
+    } catch (e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
+            return cachedClearTimeout.call(null, marker);
+        } catch (e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
+            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
+            return cachedClearTimeout.call(this, marker);
+        }
+    }
+
+
+
+}
+var queue = [];
+var draining = false;
+var currentQueue;
+var queueIndex = -1;
+
+function cleanUpNextTick() {
+    if (!draining || !currentQueue) {
+        return;
+    }
+    draining = false;
+    if (currentQueue.length) {
+        queue = currentQueue.concat(queue);
+    } else {
+        queueIndex = -1;
+    }
+    if (queue.length) {
+        drainQueue();
+    }
+}
+
+function drainQueue() {
+    if (draining) {
+        return;
+    }
+    var timeout = runTimeout(cleanUpNextTick);
+    draining = true;
+
+    var len = queue.length;
+    while(len) {
+        currentQueue = queue;
+        queue = [];
+        while (++queueIndex < len) {
+            if (currentQueue) {
+                currentQueue[queueIndex].run();
+            }
+        }
+        queueIndex = -1;
+        len = queue.length;
+    }
+    currentQueue = null;
+    draining = false;
+    runClearTimeout(timeout);
+}
+
+process.nextTick = function (fun) {
+    var args = new Array(arguments.length - 1);
+    if (arguments.length > 1) {
+        for (var i = 1; i < arguments.length; i++) {
+            args[i - 1] = arguments[i];
+        }
+    }
+    queue.push(new Item(fun, args));
+    if (queue.length === 1 && !draining) {
+        runTimeout(drainQueue);
+    }
+};
+
+// v8 likes predictible objects
+function Item(fun, array) {
+    this.fun = fun;
+    this.array = array;
+}
+Item.prototype.run = function () {
+    this.fun.apply(null, this.array);
+};
+process.title = 'browser';
+process.browser = true;
+process.env = {};
+process.argv = [];
+process.version = ''; // empty string to avoid regexp issues
+process.versions = {};
+
+function noop() {}
+
+process.on = noop;
+process.addListener = noop;
+process.once = noop;
+process.off = noop;
+process.removeListener = noop;
+process.removeAllListeners = noop;
+process.emit = noop;
+
+process.binding = function (name) {
+    throw new Error('process.binding is not supported');
+};
+
+process.cwd = function () { return '/' };
+process.chdir = function (dir) {
+    throw new Error('process.chdir is not supported');
+};
+process.umask = function() { return 0; };
+
+},{}]},{},[8]);

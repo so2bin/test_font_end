@@ -12,24 +12,7 @@
         </div>
         <div id="res-tips">
             <div v-bind:style="{color: res_tips_color}">{{res_tips_text}}</div>
-        </div><template>
-        </template>
-        
-        <script>
-        export default {
-        
-          name: 'content',
-        
-          data () {
-            return {
-        
-            };
-          }
-        };
-        </script>
-        
-        <style lang="css" scoped>
-        </style>
+        </div>
     </div>
 </template>
 <script>
